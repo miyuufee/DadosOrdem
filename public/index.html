@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agentes da Ordem</title>
+  <style>
+    body {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #0b0b10;
+      color: #e0f4ea;
+    }
+
+    input,
+    button {
+      margin: 5px 0;
+      padding: 6px;
+      width: 100%;
+      background-color: #17161b;
+      color: #e0f4ea;
+      border: 1px solid #404046;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #29292d;
+      border: 1px solid #4d4d55;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #35353c;
+    }
+
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #18181c;
+    }
+
+    th,
+    td {
+      padding: 5px;
+      border: 1px solid #4d4d55;
+      text-align: center;
+    }
+
+    th {
+      background-color: #252429;
+      color: #e0f4ea;
+    }
+
+    select {
+  margin: 5px 0;
+  padding: 6px;
+  width: 100%;
+  background-color: #17161b;
+  color: #e0f4ea;
+  border: 1px solid #404046;
+}
+
+select:focus {
+  outline: none;
+  border-color: #71cca9;
+  box-shadow: 0 0 5px #71cca9;
+}
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      }
+
+    .titulos {
+      font-weight: bold;
+      text-align: center;
+      }
+
+    .diferenciadorTabela {
+      color: #487a67;
+    }
+
+    .diferenciadorNome {
+      color: #71cca9;
+      font-weight: bold;
+    }
+
+    .estado-vivo {
+  color: #00e676;
+  font-weight: bold;
+}
+
+.estado-morto {
+  color: #e53935;
+  font-weight: bold;
+}
+  </style>
+</head>
+<body>
+
+  <h1 class="titulos">Cadastro de Agentes</h1>
+
+  <form id="agenteForm">
+    <input type="hidden" id="id" />
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="number" id="idade" placeholder="Idade" required />
+    <input type="text" id="classe" placeholder="Classe" required />
+    <input type="text" id="trilha" placeholder="Trilha" required />
+    <input type="text" id="origem" placeholder="Origem" required />
+    <select id="estado" required>
+  <option value="">Selecione o estado atual do agente</option>
+  <option value="VIVO">VIVO</option>
+  <option value="MORTO">MORTO</option>
+</select>
+    <button type="submit">Salvar</button>
+  </form>
+
+  <h2 class="titulos">Lista de Agentes</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="diferenciadorTabela">NOME</th>
+        <th class="diferenciadorTabela">IDADE</th>
+        <th class="diferenciadorTabela">CLASSE</th>
+        <th class="diferenciadorTabela">TRILHA</th>
+        <th class="diferenciadorTabela">ORIGEM</th>
+        <th class="diferenciadorTabela">ESTADO</th>
+      </tr>
+    </thead>
+    <tbody id="agenteTable"></tbody>
+  </table>
+
+  <script>
+    const API_URL = "http://localhost:3000/agentes";
+
+    async function carregarAgentes() {
+      const res = await fetch(API_URL);
+      const agentes = await res.json();
+      const tabela = document.getElementById("agenteTable");
+      tabela.innerHTML = "";
+
+      agentes.forEach(agente => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="diferenciadorNome">${agente.nome}</td>
+          <td>${agente.idade}</td>
+          <td>${agente.classe}</td>
+          <td>${agente.trilha}</td>
+          <td>${agente.origem}</td>
+          <td class="${agente.estado.toLowerCase() === 'vivo' ? 'estado-vivo' : agente.estado.toLowerCase() === 'morto' ? 'estado-morto' : 'diferenciadorEstado'}">
+  ${agente.estado}
+</td>
+          <td class="actions">
+            <button onclick="editarAgente(${agente.id})">Editar</button>
+            <button onclick="excluirAgente(${agente.id})">Excluir</button>
+          </td>
+        `;
+        tabela.appendChild(row);
+      });
+    }
+
+    async function salvarAgente(e) {
+      e.preventDefault();
+      const id = document.getElementById("id").value;
+      const data = {
+        nome: document.getElementById("nome").value,
+        idade: document.getElementById("idade").value,
+        classe: document.getElementById("classe").value,
+        trilha: document.getElementById("trilha").value,
+        origem: document.getElementById("origem").value,
+        estado: document.getElementById("estado").value,
+      };
+
+      const metodo = id ? "PUT" : "POST";
+      const url = id ? `${API_URL}/${id}` : API_URL;
+
+      await fetch(url, {
+        method: metodo,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      document.getElementById("agenteForm").reset();
+      carregarAgentes();
+    }
+
+    async function editarAgente(id) {
+      const res = await fetch(`${API_URL}/${id}`, { method: "GET" });
+      const agente = await res.json();
+
+      document.getElementById("id").value = id;
+      document.getElementById("nome").value = agente.nome;
+      document.getElementById("idade").value = agente.idade;
+      document.getElementById("classe").value = agente.classe;
+      document.getElementById("trilha").value = agente.trilha;
+      document.getElementById("origem").value = agente.origem;
+      document.getElementById("estado").value = agente.estado;
+    }
+
+    async function excluirAgente(id) {
+      if (confirm("Deseja excluir este agente?")) {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        carregarAgentes();
+      }
+    }
+
+    document.getElementById("agenteForm").addEventListener("submit", salvarAgente);
+    carregarAgentes();
+  </script>
+
+</body>
+</html>
