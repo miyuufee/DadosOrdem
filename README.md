@@ -62,7 +62,7 @@ A API será iniciada no endereço `http://localhost:3000` (ou outra porta defini
 ```
 DadosOrdem/
 ├── banco-de-dados/       # Possíveis scripts SQL
-├── public/               # Arquivos públicos (se houver)
+├── public/               # Arquivos públicos
 ├── src/                  # Código-fonte da aplicação
 │   └── server.js         # Ponto de entrada da API
 ├── knexfile.js           # Configuração do Knex
