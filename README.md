@@ -15,8 +15,8 @@ Antes de iniciar, certifique-se de ter instalado:
 1. **Clone o repositório**
 
 ```bash
-git clone https://github.com/miyuufee/api-crud-js-main.git
-cd api-crud-js-main
+git clone https://github.com/miyuufee/DadosOrdem.git
+cd DadosOrdem
 ```
 
 2. **Instale as dependências**
@@ -60,7 +60,7 @@ A API será iniciada no endereço `http://localhost:3000` (ou outra porta defini
 ## Estrutura do projeto
 
 ```
-api-crud-js-main/
+DadosOrdem/
 ├── banco-de-dados/       # Possíveis scripts SQL
 ├── public/               # Arquivos públicos (se houver)
 ├── src/                  # Código-fonte da aplicação
