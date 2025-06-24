@@ -57,21 +57,21 @@
     }
 
     select {
-  margin: 5px 0;
-  padding: 6px;
-  width: 100%;
-  background-color: #17161b;
-  color: #e0f4ea;
-  border: 1px solid #404046;
-}
+      margin: 5px 0;
+      padding: 6px;
+      width: 100%;
+      background-color: #17161b;
+      color: #e0f4ea;
+      border: 1px solid #404046;
+    }
 
-select:focus {
-  outline: none;
-  border-color: #71cca9;
-  box-shadow: 0 0 5px #71cca9;
-}
+    select:focus {
+      outline: none;
+      border-color: #71cca9;
+      box-shadow: 0 0 5px #71cca9;
+    }
 
-    .actions {
+    .acao {
       display: flex;
       gap: 10px;
       }
@@ -91,19 +91,34 @@ select:focus {
     }
 
     .estado-vivo {
-  color: #00e676;
-  font-weight: bold;
-}
+      color: #00e676;
+      font-weight: bold;
+    }
 
-.estado-morto {
-  color: #e53935;
-  font-weight: bold;
-}
+    .estado-morto {
+      color: #e53935;
+      font-weight: bold;
+    }
+
+    .simbolo {
+    font-size: 14px;
+    line-height: 1.4;
+    }
   </style>
 </head>
-<body>
 
-  <h1 class="titulos">Cadastro de Agentes</h1>
+<body>
+  
+  <pre class="titulos">   ____  _____  _____   ____    _____  ______          _      _____ _______        _____ 
+  / __ \|  __ \|  __ \ / __ \  |  __ \|  ____|   /\   | |    |_   _|__   __|/\    / ____|
+ | |  | | |__) | |  | | |  | | | |__) | |__     /  \  | |      | |    | |  /  \  | (___  
+ | |  | |  _  /| |  | | |  | | |  _  /|  __|   / /\ \ | |      | |    | | / /\ \  \___ \ 
+ | |__| | | \ \| |__| | |__| | | | \ \| |____ / ____ \| |____ _| |_   | |/ ____ \ ____) |
+  \____/|_|  \_|_____/ \____/  |_|  \_|______/_/    \_|______|_____|  |_/_/    \_|_____/ 
+                                                                                         
+                                                                                         </pre>
+  
+  <h1 class="titulos">|Cadastro de Agentes|</h1>
 
   <form id="agenteForm">
     <input type="hidden" id="id" />
@@ -120,7 +135,7 @@ select:focus {
     <button type="submit">Salvar</button>
   </form>
 
-  <h2 class="titulos">Lista de Agentes</h2>
+  <h2 class="titulos">|Lista de Agentes|</h2>
   <table>
     <thead>
       <tr>
@@ -155,7 +170,7 @@ select:focus {
           <td class="${agente.estado.toLowerCase() === 'vivo' ? 'estado-vivo' : agente.estado.toLowerCase() === 'morto' ? 'estado-morto' : 'diferenciadorEstado'}">
   ${agente.estado}
 </td>
-          <td class="actions">
+          <td class="acao">
             <button onclick="editarAgente(${agente.id})">Editar</button>
             <button onclick="excluirAgente(${agente.id})">Excluir</button>
           </td>
